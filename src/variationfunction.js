@@ -11,7 +11,7 @@ const getVariation = (variationList) => {
         variationNewList[item.variationName].add(item.variationValue);
       }
     });
-  });
+  }); 
   for (var key in variationNewList) {
     variationNewList[key] = [...variationNewList[key]];
   }
