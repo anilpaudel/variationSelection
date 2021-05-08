@@ -43,7 +43,7 @@ export default function CheckboxLabels() {
   const [selectedVariation, setSelectedVariation] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5050/api/v1/product/608e0d133700764e892f1b3f")
+    fetch("http://182.93.85.13:5050/api/v1/product/608e0d133700764e892f1b3f")
       .then((res) => res.json())
       .then((response) => {
         if (response.data && response.data.productVariations) {
