@@ -22,22 +22,6 @@ const GreenCheckbox = withStyles({
 })((props) => <Checkbox color="default" {...props} />);
 
 export default function CheckboxLabels() {
-  const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true,
-    checkedF: true,
-    checkedG: true,
-  });
-
-  const handleChange = (event) => {
-    console.log("filtered object is ", filterObject);
-    console.log("initial object is ", initialObject);
-
-    console.log("the selected variation is ", selectedVariation);
-
-    return setState({ ...state, [event.target.name]: event.target.checked });
-  };
-
   const handleChangeValue = (event, item) => {
     console.log(item);
     if (event.target.checked) {
@@ -51,7 +35,6 @@ export default function CheckboxLabels() {
       // _.omit(oldFilterObject,item.variationName)
       setFilterObject(oldFilterObject);
     }
-    // return   setState({ ...state, [event.target.name]: event.target.checked });
   };
 
   const [variationList, setVariationList] = useState([]);
@@ -64,14 +47,15 @@ export default function CheckboxLabels() {
       .then((res) => res.json())
       .then((response) => {
         if (response.data && response.data.productVariations) {
-          let variationCombo = variationFunction.getVariation(
-            variationData.variationList
-          );
+          let variationSource = variationData.variationList;
+          //let variationSource= response.data.productVariations
+
+          let variationCombo = variationFunction.getVariation(variationSource);
           let initialObject = variationFunction.getInitialObject(
             variationCombo.variationNewList
           );
-          setSelectedVariation(variationData.variationList[0]);
-          setVariationList(variationData.variationList);
+          setSelectedVariation(variationSource[0]);
+          setVariationList(variationSource);
           setInitialObject(initialObject);
           console.log(
             variationFunction.getVariation(response.data.productVariations)
@@ -81,18 +65,14 @@ export default function CheckboxLabels() {
   }, []);
 
   useEffect(() => {
-    console.log("filter object is ", filterObject);
-    console.log("variationList is", variationList);
     let filteredVariation = variationFunction.getFilteredVariation(
       filterObject,
       variationList
     );
 
-    console.log("filtered variation is ", filteredVariation);
     let filteredVariationCombo = variationFunction.getVariation(
       filteredVariation
     );
-    console.log("filtered variation comnbo is ", filteredVariationCombo);
     let updatedInitialObject = variationFunction.getUpdatedInitialObject(
       initialObject,
       filterObject,
@@ -122,83 +102,8 @@ export default function CheckboxLabels() {
           />
         );
       })}
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={state.checkedA}
-            onChange={handleChange}
-            name="checkedA"
-            names="checkedA"
-          />
-        }
-        label="Secondary"
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={state.checkedB}
-            onChange={handleChange}
-            name="checkedB"
-            color="primary"
-          />
-        }
-        label="Primary"
-      />
-      <FormControlLabel
-        control={<Checkbox name="checkedC" />}
-        label="Uncontrolled"
-      />
-      <FormControlLabel
-        disabled
-        control={<Checkbox name="checkedD" />}
-        label="Disabled"
-      />
-      <FormControlLabel
-        disabled
-        control={<Checkbox checked name="checkedE" />}
-        label="Disabled"
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={state.checkedF}
-            onChange={handleChange}
-            name="checkedF"
-            indeterminate
-          />
-        }
-        label="Indeterminate"
-      />
-      <FormControlLabel
-        control={
-          <GreenCheckbox
-            checked={state.checkedG}
-            onChange={handleChange}
-            name="checkedG"
-          />
-        }
-        label="Custom color"
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            icon={<FavoriteBorder />}
-            checkedIcon={<Favorite />}
-            name="checkedH"
-          />
-        }
-        label="Custom icon"
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-            checkedIcon={<CheckBoxIcon fontSize="small" />}
-            name="checkedI"
-          />
-        }
-        label="Custom size"
-      />
+
+
     </FormGroup>
   );
 }
