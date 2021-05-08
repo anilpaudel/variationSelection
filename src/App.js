@@ -33,6 +33,8 @@ export default function CheckboxLabels() {
     console.log("filtered object is ", filterObject);
     console.log("initial object is ", initialObject);
 
+    console.log("the selected variation is ", selectedVariation);
+
     return setState({ ...state, [event.target.name]: event.target.checked });
   };
 
@@ -55,6 +57,7 @@ export default function CheckboxLabels() {
   const [variationList, setVariationList] = useState([]);
   const [initialObject, setInitialObject] = useState([]);
   const [filterObject, setFilterObject] = useState({});
+  const [selectedVariation, setSelectedVariation] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:5050/api/v1/product/608e0d133700764e892f1b3f")
@@ -67,7 +70,7 @@ export default function CheckboxLabels() {
           let initialObject = variationFunction.getInitialObject(
             variationCombo.variationNewList
           );
-
+          setSelectedVariation(variationData.variationList[0]);
           setVariationList(variationData.variationList);
           setInitialObject(initialObject);
           console.log(
@@ -78,23 +81,25 @@ export default function CheckboxLabels() {
   }, []);
 
   useEffect(() => {
-    console.log("filter object is ",filterObject)
-    console.log("variationList is",variationList) 
+    console.log("filter object is ", filterObject);
+    console.log("variationList is", variationList);
     let filteredVariation = variationFunction.getFilteredVariation(
       filterObject,
       variationList
     );
 
-    console.log("filtered variation is ",filteredVariation)
+    console.log("filtered variation is ", filteredVariation);
     let filteredVariationCombo = variationFunction.getVariation(
       filteredVariation
     );
-console.log('filtered variation comnbo is ',filteredVariationCombo)
+    console.log("filtered variation comnbo is ", filteredVariationCombo);
     let updatedInitialObject = variationFunction.getUpdatedInitialObject(
       initialObject,
       filterObject,
       filteredVariationCombo.variationNewList
     );
+
+    setSelectedVariation(filteredVariation ? filteredVariation[0] : null);
 
     setInitialObject(updatedInitialObject);
   }, [filterObject]);
